@@ -1,0 +1,9 @@
+# Firestore project + credentials
+project_id: "YOUR_PROJECT_ID"
+creds_file: "/home/pi/keys/firebase-admin.json"
+user_uid: "YOUR_FIREBASE_UID"
+
+# Options
+allowed_colors: [] # leave empty [] for all
+post_min_interval_sec: 600
+debug: false

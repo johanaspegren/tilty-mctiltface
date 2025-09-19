@@ -1,0 +1,21 @@
+[Unit]
+Description=Tilty McTiltface BLE → Firestore Bridge
+After=network.target bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=simple
+# Adjust this path to your venv and tilt_bridge.py
+ExecStart=/home/pi/dev/tilt/.venv/bin/python /home/pi/dev/tilt/rpi/tilt_bridge.py
+WorkingDirectory=/home/pi/dev/tilt/rpi
+Restart=always
+RestartSec=5
+User=pi
+Environment="PYTHONUNBUFFERED=1"
+
+# Make sure log file is writable by pi
+StandardOutput=append:/home/pi/tiltbridge.log
+StandardError=append:/home/pi/tiltbridge.err
+
+[Install]
+WantedBy=multi-user.target
