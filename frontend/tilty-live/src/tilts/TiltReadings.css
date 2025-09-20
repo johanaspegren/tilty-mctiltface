@@ -69,3 +69,35 @@
   color: #a3e635; /* lime RSSI */
   font-weight: 500;
 }
+
+.reading-cluster {
+  margin: 1rem 0;
+  background: #0b0b0f;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cluster-header {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: #1f2937;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.cluster-header:hover {
+  background: #111827;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.arrow.open {
+  transform: rotate(90deg); /* ▶ rotates into ▼ */
+}
