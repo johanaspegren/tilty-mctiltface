@@ -58,6 +58,20 @@ class TiltBridge:
             return False
         return True
 
+    def get_current_batch(self, color: str):
+        """Return current batch id for this Tilt color, or None."""
+        ref = (
+            self.writer.db.collection("users")
+            .document(self.writer.user_uid)
+            .collection("tilts")
+            .document(color)
+        )
+        doc = ref.get()
+        if doc.exists:
+            data = doc.to_dict()
+            return data.get("current_batch")
+        return None
+
     def detection_callback(self, device, adv):
         for cid, data in (adv.manufacturer_data or {}).items():
             if cid != APPLE_COMPANY_ID:
@@ -81,6 +95,8 @@ class TiltBridge:
                 if not self._should_post(color, temp_f, sg, epoch):
                     return
 
+                batch_id = self.get_current_batch(color)
+
                 payload = {
                     "uuid": uuid_str,
                     "color": color,
@@ -94,6 +110,7 @@ class TiltBridge:
                     "pi_hostname": self.hostname,
                     "seen_epoch": epoch,
                     "seen_iso": now.isoformat(),
+                    "batch_id": batch_id,   # 👈 attach batch here
                 }
 
                 log.info(f"Posting {color}: {payload}")

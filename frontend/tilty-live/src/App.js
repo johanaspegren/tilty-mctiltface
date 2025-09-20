@@ -1,35 +1,19 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, NavLink, useParams } from "react-router-dom"; // 👈 add useParams
+import { Routes, Route, NavLink } from "react-router-dom";
 import { authReady, onUser } from "./firebase";
 import AuthForm from "./components/AuthForm";
-import BatchesPage from "./batches/BatchesPage";
-import TiltReadings from "./tilts/TiltReadings";
+import HomePage from "./pages/HomePage";
+import TiltsPage from "./pages/TiltsPage";
+import BatchesPage from "./pages/BatchesPage";
 import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
 
-  // Initial auth state
   useEffect(() => {
     authReady.then((u) => setUser(u));
     return onUser((u) => setUser(u));
   }, []);
-
-  function TiltRoute() {
-    const { color } = useParams();
-    return <TiltReadings color={color.toUpperCase()} />;
-  }
-
-  function TiltsOverview() {
-    const colors = ["RED", "YELLOW"]; // add the ones you actually have
-    return (
-      <div className="page">
-        {colors.map((c) => (
-          <TiltReadings key={c} color={c} />
-        ))}
-      </div>
-    );
-  }
 
   if (!user) {
     return (
@@ -48,6 +32,9 @@ function App() {
       </header>
 
       <nav className="app-tabs">
+        <NavLink to="/" end className={({ isActive }) => `tab ${isActive ? "active" : ""}`}>
+          Home
+        </NavLink>
         <NavLink to="/tilts" className={({ isActive }) => `tab ${isActive ? "active" : ""}`}>
           Tilts
         </NavLink>
@@ -58,11 +45,9 @@ function App() {
 
       <main className="app-main">
         <Routes>
-          <Route path="/tilts/:color" element={<TiltRoute />} />
-          <Route path="/tilts" element={<TiltsOverview />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/tilts/*" element={<TiltsPage />} />
           <Route path="/batches" element={<BatchesPage />} />
-          {/* fallback: redirect to tilts overview */}
-          <Route path="*" element={<TiltsOverview />} />
         </Routes>
       </main>
     </div>

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { listBatches, saveBatch, deleteBatch, setCurrentBatch } from "../lib/firestore";
+import { listBatches, saveBatch, deleteBatch } from "../lib/firestore";
 import "./BatchesPage.css";
 
 export default function BatchesPage() {
   const [batches, setBatches] = useState([]);
-  const [editing, setEditing] = useState(null); // current batch being edited
-  const location = useLocation();
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({
     name: "",
     style: "",
@@ -33,11 +31,6 @@ export default function BatchesPage() {
     e.preventDefault();
     const id = await saveBatch({ ...form });
     console.log("Saved batch", id);
-    // 👇 If a tilt color is selected in your form
-    if (form.tilt_color) {
-        await setCurrentBatch(form.tilt_color.toUpperCase(), id);
-        console.log(`Tilt ${form.tilt_color} is now linked to batch ${id}`);
-    }
     setForm({ name: "", style: "", hops: "", notes: "", start: "", end: "" });
     setEditing(null);
     refresh();
@@ -55,27 +48,8 @@ export default function BatchesPage() {
     setForm(batch);
   }
 
-  // Prefill when navigated with suggested dates
-  useEffect(() => {
-    if (location.state?.suggestedStart || location.state?.suggestedEnd) {
-      setForm((f) => ({
-        ...f,
-        start: formatDateInput(location.state.suggestedStart),
-        end: formatDateInput(location.state.suggestedEnd),
-      }));
-    }
-  }, [location.state]);
-
-  // Helper: convert Date or ISO string into yyyy-MM-dd for <input type="date">
-  function formatDateInput(val) {
-    if (!val) return "";
-    const d = val instanceof Date ? val : new Date(val);
-    if (isNaN(d)) return "";
-    return d.toISOString().split("T")[0];
-  }
-
   return (
-    <div className="batches-page">
+    <div className="page">
       <h3 className="section-title">Your Batches</h3>
 
       <form className="batch-form" onSubmit={handleSubmit}>
@@ -103,16 +77,6 @@ export default function BatchesPage() {
         <div className="form-row">
           <label>End Date</label>
           <input type="date" name="end" value={form.end} onChange={handleChange} />
-        </div>
-        <div className="form-row">
-            <label>Tilt Color</label>
-            <select name="tilt_color" value={form.tilt_color} onChange={handleChange}>
-                <option value="">— None —</option>
-                <option value="RED">Red</option>
-                <option value="YELLOW">Yellow</option>
-                <option value="GREEN">Green</option>
-                {/* add the colors you use */}
-            </select>
         </div>
         <div className="form-actions">
           <button type="submit" className="btn">
