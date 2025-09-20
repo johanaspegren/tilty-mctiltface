@@ -69,51 +69,54 @@ export default function TiltReadings({ color }) {
     setClusters(clusters.reverse()); // newest cluster first
   }, [readings]);
 
-  return (
-    <div className="tilt-readings">
-      <h3>{color} Tilt Readings</h3>
-      {clusters.length === 0 ? (
-        <p>No readings yet.</p>
-      ) : (
-        clusters.map((cluster, idx) => {
-          const isOpen = openCluster === idx;
-          return (
-            <div key={idx} className="reading-cluster">
-              <div
-                className="cluster-header"
-                onClick={() => setOpenCluster(isOpen ? null : idx)}
-              >
-                <span className={`arrow ${isOpen ? "open" : ""}`}>▶</span>
-                <h4>
-                  Cluster {idx + 1} ({cluster.length} readings) –{" "}
-                  {formatSeen(cluster[0])} →{" "}
-                  {formatSeen(cluster[cluster.length - 1])}
-                </h4>
+    return (
+      <div className="tilt-readings">
+        <h3>{color} Tilt Readings</h3>
+        {clusters.length === 0 ? (
+          <p>No readings yet.</p>
+        ) : ( 
+          clusters.map((cluster, idx) => {
+            const isOpen = openCluster === idx;
+            return (
+              <div key={idx} className="reading-cluster">
+                <div
+                  className="cluster-header"
+                  onClick={() => setOpenCluster(isOpen ? null : idx)}
+                >
+                  <span className={`arrow ${isOpen ? "open" : ""}`}>▶</span>
+                  <h4>
+                    Cluster {idx + 1} ({cluster.length} readings) –{" "}
+                    {formatSeen(cluster[0])} → {formatSeen(cluster[cluster.length - 1])}
+                  </h4>
+                </div>
+
+                <div className={`cluster-body ${isOpen ? "open" : ""}`}>
+                  <div className="cluster-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Seen</th>
+                          <th>Temp (°C)</th>
+                          <th>SG</th>
+                          <th>RSSI</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[...cluster].reverse().map((r) => (
+                          <tr key={r.id}>
+                            <td>{formatSeen(r)}</td>
+                            <td>{r.temp_c}</td>
+                            <td>{r.sg}</td>
+                            <td>{r.rssi}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
               </div>
-              {isOpen && (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Seen</th>
-                      <th>Temp (°C)</th>
-                      <th>SG</th>
-                      <th>RSSI</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cluster.slice(-20).map((r) => (
-                      <tr key={r.id}>
-                        <td>{formatSeen(r)}</td>
-                        <td>{r.temp_c}</td>
-                        <td>{r.sg}</td>
-                        <td>{r.rssi}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          );
+            );
         })
       )}
     </div>
