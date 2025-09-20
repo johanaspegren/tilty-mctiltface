@@ -129,3 +129,15 @@
   top: 0;
   background: #1f2937;
 }
+
+.cluster-actions {
+  margin: 8px 0;
+}
+
+.cluster-actions select {
+  background: #0f0f14;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 6px 10px;
+}

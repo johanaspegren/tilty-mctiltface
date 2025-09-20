@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { listBatches, saveBatch, deleteBatch } from "../lib/firestore";
 import "./BatchesPage.css";
 
 export default function BatchesPage() {
   const [batches, setBatches] = useState([]);
   const [editing, setEditing] = useState(null); // current batch being edited
+  const location = useLocation();
   const [form, setForm] = useState({
     name: "",
     style: "",
@@ -46,6 +48,25 @@ export default function BatchesPage() {
   function editBatch(batch) {
     setEditing(batch.id);
     setForm(batch);
+  }
+
+  // Prefill when navigated with suggested dates
+  useEffect(() => {
+    if (location.state?.suggestedStart || location.state?.suggestedEnd) {
+      setForm((f) => ({
+        ...f,
+        start: formatDateInput(location.state.suggestedStart),
+        end: formatDateInput(location.state.suggestedEnd),
+      }));
+    }
+  }, [location.state]);
+
+  // Helper: convert Date or ISO string into yyyy-MM-dd for <input type="date">
+  function formatDateInput(val) {
+    if (!val) return "";
+    const d = val instanceof Date ? val : new Date(val);
+    if (isNaN(d)) return "";
+    return d.toISOString().split("T")[0];
   }
 
   return (

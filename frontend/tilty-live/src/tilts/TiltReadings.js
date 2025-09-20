@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { subscribeMeasurements } from "../lib/firestore";
+import { listBatches, assignMeasurement } from "../lib/firestore";
+import { useNavigate } from "react-router-dom"; // if using react-router
 import "./TiltReadings.css";
 
 export default function TiltReadings({ color }) {
   const [readings, setReadings] = useState([]);
   const [clusters, setClusters] = useState([]);
   const [openCluster, setOpenCluster] = useState(null); // track expanded cluster
+  const [batches, setBatches] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Live updates
@@ -15,6 +19,11 @@ export default function TiltReadings({ color }) {
     return () => unsubscribe();
   }, [color]);
 
+  useEffect(() => {
+    // Load batches once
+    listBatches().then(setBatches);
+  }, []);
+ 
   // Format timestamps nicely
   const formatSeen = (r) => {
     try {
@@ -69,56 +78,83 @@ export default function TiltReadings({ color }) {
     setClusters(clusters.reverse()); // newest cluster first
   }, [readings]);
 
-    return (
-      <div className="tilt-readings">
-        <h3>{color} Tilt Readings</h3>
-        {clusters.length === 0 ? (
-          <p>No readings yet.</p>
-        ) : ( 
-          clusters.map((cluster, idx) => {
-            const isOpen = openCluster === idx;
-            return (
-              <div key={idx} className="reading-cluster">
-                <div
-                  className="cluster-header"
-                  onClick={() => setOpenCluster(isOpen ? null : idx)}
-                >
-                  <span className={`arrow ${isOpen ? "open" : ""}`}>▶</span>
-                  <h4>
-                    Cluster {idx + 1} ({cluster.length} readings) –{" "}
-                    {formatSeen(cluster[0])} → {formatSeen(cluster[cluster.length - 1])}
-                  </h4>
-                </div>
+  async function connectCluster(cluster, batchId) {
+    for (let r of cluster) {
+      await assignMeasurement(color, r.id, batchId);
+    }
+    alert(`Cluster connected to batch ${batchId}`);
+  }
 
-                <div className={`cluster-body ${isOpen ? "open" : ""}`}>
-                  <div className="cluster-scroll">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Seen</th>
-                          <th>Temp (°C)</th>
-                          <th>SG</th>
-                          <th>RSSI</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[...cluster].reverse().map((r) => (
-                          <tr key={r.id}>
-                            <td>{formatSeen(r)}</td>
-                            <td>{r.temp_c}</td>
-                            <td>{r.sg}</td>
-                            <td>{r.rssi}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                
+  return (
+    <div className="tilt-readings">
+      <h3>{color} Tilt Readings</h3>
+      {clusters.length === 0 ? (
+        <p>No readings yet.</p>
+      ) : (
+        clusters.map((cluster, idx) => (
+          <div key={idx} className="reading-cluster">
+            <h4>
+              Cluster {idx + 1} ({cluster.length} readings) –{" "}
+              {formatSeen(cluster[0])} → {formatSeen(cluster[cluster.length - 1])}
+            </h4>
+
+            <div className="cluster-actions">
+              <select
+                defaultValue=""
+                onChange={(e) => {
+                  const batchId = e.target.value;
+                  if (batchId === "__new__") {
+                    navigate("/batches", {
+                      state: {
+                        suggestedStart: cluster[0].seen_iso || cluster[0].seen_at?.toDate(),
+                        suggestedEnd:
+                          cluster[cluster.length - 1].seen_iso ||
+                          cluster[cluster.length - 1].seen_at?.toDate(),
+                      },
+                    });
+                  } else if (batchId) {
+                    connectCluster(cluster, batchId);
+                  }
+                }}
+              >
+                <option value="">Assign to batch…</option>
+                {batches.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name || "Unnamed batch"}
+                  </option>
+                ))}
+                <option value="__new__">➕ Create New Batch…</option>
+              </select>
+            </div>
+
+            <div className="cluster-body open">
+              <div className="cluster-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Seen</th>
+                      <th>Temp (°C)</th>
+                      <th>SG</th>
+                      <th>RSSI</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...cluster].reverse().map((r) => (
+                      <tr key={r.id}>
+                        <td>{formatSeen(r)}</td>
+                        <td>{r.temp_c}</td>
+                        <td>{r.sg}</td>
+                        <td>{r.rssi}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            );
-        })
+            </div>
+          </div>
+        ))
       )}
     </div>
   );
 }
+

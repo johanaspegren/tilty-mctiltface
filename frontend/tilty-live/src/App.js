@@ -1,19 +1,35 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, NavLink, useParams } from "react-router-dom"; // 👈 add useParams
 import { authReady, onUser } from "./firebase";
 import AuthForm from "./components/AuthForm";
-import TiltReadings from "./tilts/TiltReadings";
 import BatchesPage from "./batches/BatchesPage";
+import TiltReadings from "./tilts/TiltReadings";
 import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [tab, setTab] = useState("tilts"); // "tilts" | "batches"
 
   // Initial auth state
   useEffect(() => {
     authReady.then((u) => setUser(u));
     return onUser((u) => setUser(u));
   }, []);
+
+  function TiltRoute() {
+    const { color } = useParams();
+    return <TiltReadings color={color.toUpperCase()} />;
+  }
+
+  function TiltsOverview() {
+    const colors = ["RED", "YELLOW"]; // add the ones you actually have
+    return (
+      <div className="page">
+        {colors.map((c) => (
+          <TiltReadings key={c} color={c} />
+        ))}
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -27,43 +43,30 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h2>Tilty McTiltface</h2>
+        <h2>Welcome, {user.email}</h2>
         <AuthForm user={user} />
       </header>
 
       <nav className="app-tabs">
-        <button
-          className={tab === "tilts" ? "tab active" : "tab"}
-          onClick={() => setTab("tilts")}
-        >
+        <NavLink to="/tilts" className={({ isActive }) => `tab ${isActive ? "active" : ""}`}>
           Tilts
-        </button>
-        <button
-          className={tab === "batches" ? "tab active" : "tab"}
-          onClick={() => setTab("batches")}
-        >
+        </NavLink>
+        <NavLink to="/batches" className={({ isActive }) => `tab ${isActive ? "active" : ""}`}>
           Batches
-        </button>
+        </NavLink>
       </nav>
 
       <main className="app-main">
-        {tab === "tilts" && (
-          <div className="page">
-            <TiltReadings color="RED" />
-            <TiltReadings color="YELLOW" />
-            {/* Add other Tilt colors here if you like */}
-          </div>
-        )}
-
-        {tab === "batches" && (
-          <div className="page">
-            <BatchesPage />
-          </div>
-        )}
+        <Routes>
+          <Route path="/tilts/:color" element={<TiltRoute />} />
+          <Route path="/tilts" element={<TiltsOverview />} />
+          <Route path="/batches" element={<BatchesPage />} />
+          {/* fallback: redirect to tilts overview */}
+          <Route path="*" element={<TiltsOverview />} />
+        </Routes>
       </main>
     </div>
   );
 }
 
 export default App;
-  
