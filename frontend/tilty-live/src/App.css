@@ -1,0 +1,52 @@
+.app-shell {
+  padding: 1rem;
+  color: #e5e7eb;
+  background: #0b0b0f;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tab:hover {
+  background: #111827;
+}
+
+.tab.active {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #fff;
+}
+
+.app-main {
+  background: #0f0f14;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

@@ -1,0 +1,82 @@
+.batches-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.batch-form {
+  background: #0f0f14;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 16px;
+  color: #e5e7eb;
+}
+
+.batch-form h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #f9fafb;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #a1a1aa;
+}
+
+.form-row input,
+.form-row textarea {
+  background: #0b0b0f;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  padding: 8px;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.form-row textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.batch-list {
+  display: grid;
+  gap: 16px;
+}
+
+.batch-card {
+  background: #111;
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.batch-card h4 {
+  margin-top: 0;
+  color: #93c5fd;
+}
+
+.batch-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn.danger {
+  background: #7f1d1d;
+  border-color: #991b1b;
+}
+
+.btn.danger:hover {
+  background: #450a0a;
+}

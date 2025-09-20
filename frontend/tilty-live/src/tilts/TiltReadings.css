@@ -1,0 +1,71 @@
+/* src/tilts/TiltReadings.css */
+
+.tilt-readings {
+  background: #0b0b0f;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+  color: #e5e7eb;
+  max-width: 720px;
+  overflow-x: auto;
+}
+
+.tilt-readings h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f9fafb;
+  border-bottom: 1px solid #27272a;
+  padding-bottom: 8px;
+}
+
+.tilt-readings table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tilt-readings thead th {
+  text-align: left;
+  padding: 8px 12px;
+  font-weight: 500;
+  color: #a1a1aa;
+  border-bottom: 1px solid #27272a;
+}
+
+.tilt-readings tbody tr {
+  border-bottom: 1px solid #1f2937;
+  transition: background 0.2s;
+}
+
+.tilt-readings tbody tr:hover {
+  background: #111827;
+}
+
+.tilt-readings td {
+  padding: 8px 12px;
+  color: #e5e7eb;
+}
+
+.tilt-readings td:nth-child(1) {
+  font-family: monospace;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.tilt-readings td:nth-child(2) {
+  color: #93c5fd; /* bluish temp */
+  font-weight: 500;
+}
+
+.tilt-readings td:nth-child(3) {
+  color: #fbbf24; /* amber SG */
+  font-weight: 500;
+}
+
+.tilt-readings td:nth-child(4) {
+  color: #a3e635; /* lime RSSI */
+  font-weight: 500;
+}
