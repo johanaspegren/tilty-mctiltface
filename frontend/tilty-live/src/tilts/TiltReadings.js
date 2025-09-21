@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { subscribeMeasurements } from "../lib/firestore";
-import { listBatches, assignMeasurement } from "../lib/firestore";
+import { listBatches, assignMeasurement, setCurrentBatch } from "../lib/firestore";
 import { useNavigate } from "react-router-dom"; // if using react-router
 import "./TiltReadings.css";
 
@@ -78,7 +78,10 @@ export default function TiltReadings({ color }) {
     setClusters(clusters.reverse()); // newest cluster first
   }, [readings]);
 
-  async function connectCluster(cluster, batchId) {
+  async function connectCluster(cluster, batchId, color) {
+    // set current batch for the tilt    
+    await setCurrentBatch(color, batchId);
+    // assign all readings in the cluster to the batch
     for (let r of cluster) {
       await assignMeasurement(color, r.id, batchId);
     }
@@ -113,7 +116,7 @@ export default function TiltReadings({ color }) {
                       },
                     });
                   } else if (batchId) {
-                    connectCluster(cluster, batchId);
+                    connectCluster(cluster, batchId, color);
                   }
                 }}
               >

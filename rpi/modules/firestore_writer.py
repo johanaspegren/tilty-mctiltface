@@ -64,7 +64,7 @@ class FirestoreWriter:
         log.debug("Posting to Firestore: %s", fs_payload)
         log.debug("posting URL: %s", url)
         resp = requests.post(url, headers={"Authorization": f"Bearer {self.id_token}"}, json=fs_payload)
-        log.debug("Firestore response: %s %s", resp.status_code, resp.text)
+        log.info("Firestore response: %s %s", resp.status_code, resp.text)
         if resp.status_code != 200:
             log.error("Firestore write failed: %s", resp.text)
         return resp
