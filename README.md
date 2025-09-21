@@ -76,7 +76,7 @@ sudo apt install -y bluez
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
-pip install bleak firebase-admin grpcio python-dotenv pyyaml
+pip install bleak python-dotenv pyyaml requests
 
 
 3. Bluetooth permissions
@@ -84,25 +84,19 @@ Allow Python to access BLE without sudo:
 
 sudo setcap cap_net_raw,cap_net_admin+eip $(readlink -f $(which python3))
 
+4. Firestore connection
+Open the app https://tilty-live.web.app/tilts
+create an account with email/pw and log in on the app
 
-4. Firestore setup (if setting up admin)
-In Firebase Console → Project settings → Service accounts → Generate new private key.
+Copy rpi/config.example.yaml to config.yaml and update the two fields with your email/pw:
+user_email: "tilt-pi@example.com"
+user_password: "super-secret-password"
 
-Copy JSON key to your Pi, e.g.:
-
-mkdir -p /home/pi/keys/
-nano /home/pi/keys/firebase-admin.json
-sudo chmod 600 /home/pi/keys/firebase-admin.json
-
-5. Config file
-Create rpi/config.yaml:
-
-project_id: your-project-id
-creds_file: /home/pi/keys/service-account.json
-user_uid: your-firebase-user-id
-allowed_colors: ["YELLOW", "RED"]   # optional
+and also:
+allowed_colors: ["YELLOW", "RED"]   # optional, or leave [] for all
 post_min_interval_sec: 600          # only push updates every 10min per Tilt
-debug: true
+debug: false
+
 
 🚀 Running
 Manually:
