@@ -1,3 +1,4 @@
+import requests
 import asyncio, struct, socket, yaml, logging
 from datetime import datetime, timezone
 from uuid import UUID
@@ -35,7 +36,13 @@ def f_to_c(temp_f: int) -> float:
 
 class TiltBridge:
     def __init__(self, cfg):
-        self.writer = FirestoreWriter(cfg["project_id"], cfg["creds_file"], cfg["user_uid"])
+        self.writer = FirestoreWriter(
+            cfg["project_id"],
+            cfg["api_key"],
+            cfg["user_email"],
+            cfg["user_password"],
+            cfg["user_uid"],
+        )
         self.allowed_colors = set(c.upper() for c in cfg.get("allowed_colors", [])) or None
         self.min_interval = cfg.get("post_min_interval_sec", 15)
         self.debug = cfg.get("debug", False)
@@ -58,19 +65,6 @@ class TiltBridge:
             return False
         return True
 
-    def get_current_batch(self, color: str):
-        """Return current batch id for this Tilt color, or None."""
-        ref = (
-            self.writer.db.collection("users")
-            .document(self.writer.user_uid)
-            .collection("tilts")
-            .document(color)
-        )
-        doc = ref.get()
-        if doc.exists:
-            data = doc.to_dict()
-            return data.get("current_batch")
-        return None
 
     def detection_callback(self, device, adv):
         for cid, data in (adv.manufacturer_data or {}).items():
@@ -91,11 +85,12 @@ class TiltBridge:
                 tx_power = struct.unpack("b", data[22:23])[0]
                 now = datetime.now(timezone.utc)
                 epoch = now.timestamp()
+                seen_at = now.strftime("%Y-%m-%d %H:%M:%S %Z")
 
                 if not self._should_post(color, temp_f, sg, epoch):
                     return
 
-                batch_id = self.get_current_batch(color)
+                batch_id = self.writer.get_current_batch(color)
 
                 payload = {
                     "uuid": uuid_str,
@@ -109,11 +104,11 @@ class TiltBridge:
                     "address": device.address,
                     "pi_hostname": self.hostname,
                     "seen_epoch": epoch,
+                    "seen_at": seen_at,
                     "seen_iso": now.isoformat(),
                     "batch_id": batch_id,   # 👈 attach batch here
                 }
 
-                log.info(f"Posting {color}: {payload}")
                 self.writer.write_reading(color, payload)
                 self.last_post[color] = epoch
                 self.last_values[color] = (temp_f, sg)
