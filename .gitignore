@@ -1,7 +1,9 @@
 # React
-/node_modules
+frontend/tilty-live/node_modules
 /.pnp
 .pnp.js
+.firebaserc
+*.cache
 
 # testing
 /coverage

@@ -19,18 +19,19 @@ In this application we have a simplified BLE reader that picks up the signalling
 
 ### BLE Library: Bleak vs Aioblescan
 
-
 Both [Bleak](https://github.com/hbldh/bleak) and [aioblescan](https://github.com/frawau/aioblescan) are great options for Bluetooth LE development on the Raspberry Pi. They just serve slightly different purposes:
 
 **Bleak**
-- Modern, actively maintained, cross-platform library  
-- Runs on Linux (BlueZ), macOS, and Windows  
-- High-level API (device + advertisement objects, callbacks) that integrates smoothly with async Python apps  
+
+- Modern, actively maintained, cross-platform library
+- Runs on Linux (BlueZ), macOS, and Windows
+- High-level API (device + advertisement objects, callbacks) that integrates smoothly with async Python apps
 
 **Aioblescan**
-- Linux-only, closer to the metal with raw HCI packet access  
-- Very fast and detailed: captures *everything* the radio hears, including malformed adverts  
-- Useful for debugging and specialized low-level BLE work  
+
+- Linux-only, closer to the metal with raw HCI packet access
+- Very fast and detailed: captures _everything_ the radio hears, including malformed adverts
+- Useful for debugging and specialized low-level BLE work
 
 For this project, we use **Bleak** because it provides the right balance of portability, maintainability, and ease of integration with Firestore. But if you need raw packet inspection, **aioblescan** remains a solid choice.
 
@@ -40,14 +41,14 @@ For this project, we use **Bleak** because it provides the right balance of port
 
 [Node-RED](https://nodered.org/) is a fantastic tool for building IoT flows and quick prototypes. It offers a visual programming interface and a large ecosystem of nodes.
 
-For this project, however, we chose **Python + Bleak** because:  
-- It keeps dependencies lightweight (just a Python venv with `bleak` and `firebase-admin`)  
-- The logic is transparent and version-controlled in plain Python source code  
-- It runs cross-platform, which makes local debugging easy  
-- It integrates naturally with systemd for reliable background service management  
+For this project, however, we chose **Python + Bleak** because:
+
+- It keeps dependencies lightweight (just a Python venv with `bleak` and `firebase-admin`)
+- The logic is transparent and version-controlled in plain Python source code
+- It runs cross-platform, which makes local debugging easy
+- It integrates naturally with systemd for reliable background service management
 
 If your use case leans more towards graphical flow editing or combining multiple IoT sources, Node-RED could still be a great fit. We simply picked the Python route for clarity and maintainability.
-
 
 ---
 
@@ -142,11 +143,24 @@ tail -f /home/pi/tiltbridge.log
 sudo systemctl status tiltbridge.service
 journalctl -u tiltbridge.service -f
 
+
+Restart
+# reload systemd configs (if you changed tiltbridge.service itself)
+sudo systemctl daemon-reload
+
+# restart your service
+sudo systemctl restart tiltbridge.service
+
+# check that it’s running
+sudo systemctl status tiltbridge.service
+
+# follow logs live
+journalctl -u tiltbridge.service -f
+
 ```
 
 🧹 Cleanup
 
 If you’ve previously run Node-RED or aioblescan Tilt integrations, they can interfere.
 Follow Cleanup instructions
- to remove them.
-
+to remove them.
