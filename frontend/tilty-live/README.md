@@ -13,6 +13,17 @@ Stick to brewing-related data that you’re happy to share.
 Future versions may add stricter access controls or role-based rules, but
 for now we keep it open to make it easy to experiment and demo.
 
+## build
+
+npm run build
+
+## deploy
+
+firebase deploy --only hosting
+
+Make sure to check firebase.json
+"public": "build",
+
 ## Classic React readme Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
