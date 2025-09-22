@@ -13,6 +13,8 @@ class FirestoreWriter:
         self.user_uid = user_uid
         self.id_token = None
         self.token_expiry = 0
+        # 👇 One base URL for everything
+        self.firestore_base = f"https://firestore.googleapis.com/v1/projects/{self.project_id}/databases/(default)/documents"
 
     def _refresh_token(self):
         if self.id_token and time.time() < self.token_expiry - 60:
@@ -36,10 +38,7 @@ class FirestoreWriter:
     def get_current_batch(self, color: str):
         """Fetch current batchId for a Tilt color from /tilts/{color} doc."""
         self._refresh_token()
-        url = (
-            f"https://firestore.googleapis.com/v1/projects/{self.project_id}"
-            f"/databases/(default)/documents/users/{self.user_uid}/tilts/{color}"
-        )
+        url = f"{self.firestore_base}/users/{self.user_uid}/tilts/{color}"
         resp = requests.get(url, headers={"Authorization": f"Bearer {self.id_token}"})
         if resp.status_code != 200:
             log.warning(f"Failed to fetch current batch for {color}: {resp.status_code}")
@@ -56,15 +55,12 @@ class FirestoreWriter:
 
     def write_reading(self, color: str, payload: dict):
         self._refresh_token()
-        url = (
-            f"https://firestore.googleapis.com/v1/projects/{self.project_id}"
-            f"/databases/(default)/documents/users/{self.user_uid}/tilts/{color}/readings"
-        )
+        url = f"{self.firestore_base}/users/{self.user_uid}/tilts/{color}/readings"
         fs_payload = {"fields": {k: self._wrap_value(v) for k, v in payload.items()}}
         log.debug("Posting to Firestore: %s", fs_payload)
         log.debug("posting URL: %s", url)
         resp = requests.post(url, headers={"Authorization": f"Bearer {self.id_token}"}, json=fs_payload)
-        log.info("Firestore response: %s %s", resp.status_code, resp.text)
+        #log.info("Firestore response: %s %s", resp.status_code, resp.text)
         if resp.status_code != 200:
             log.error("Firestore write failed: %s", resp.text)
         return resp
