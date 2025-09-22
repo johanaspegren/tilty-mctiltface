@@ -31,7 +31,7 @@ cd ..
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
-pip install bleak python-dotenv pyyaml requests
+pip install bleak pyyaml requests
 cd rpi
 
 # --- Capabilities ---

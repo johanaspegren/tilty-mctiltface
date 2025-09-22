@@ -10,7 +10,7 @@ class FirestoreWriter:
         self.api_key = api_key
         self.email = email
         self.password = password
-        self.user_uid = user_uid
+        self.user_uid = None   # will be set at login
         self.id_token = None
         self.token_expiry = 0
         # 👇 One base URL for everything
@@ -33,7 +33,8 @@ class FirestoreWriter:
         data = resp.json()
         self.id_token = data["idToken"]
         self.token_expiry = time.time() + int(data["expiresIn"])
-        log.info("Got Firebase ID token")
+        self.user_uid = data["localId"]   # 👈 store the UID from login
+        log.info(f"Got Firebase ID token. User UID={self.user_uid}")
 
     def get_current_batch(self, color: str):
         """Fetch current batchId for a Tilt color from /tilts/{color} doc."""

@@ -3,7 +3,6 @@ project_id: "tilty-mctiltface"
 api_key: "AIzaSyDokp-NEs3IzLSdCV7h1Z3t7ZGoJokGSGw" # from Firebase console
 user_email: "tilt-pi@example.com"
 user_password: "super-secret-password"
-user_uid: "103258596443136961382"
 
 # Options
 allowed_colors: [] # leave [] for all
