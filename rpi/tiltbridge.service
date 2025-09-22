@@ -6,8 +6,8 @@ Requires=bluetooth.service
 [Service]
 Type=simple
 # Adjust this path to your venv and tilt_bridge.py
-ExecStart=/home/pi/dev/tilt/.venv/bin/python /home/pi/dev/tilt/rpi/tilt_bridge.py
-WorkingDirectory=/home/pi/dev/tilt/rpi
+ExecStart=/home/pi/dev/tilty-mctiltface/.venv/bin/python /home/pi/dev/tilty-mctiltface/rpi/tilt_bridge.py
+WorkingDirectory=/home/pi/dev/tilty-mctiltface/rpi
 Restart=always
 RestartSec=5
 User=pi

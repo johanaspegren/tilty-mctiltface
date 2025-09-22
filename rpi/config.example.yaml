@@ -1,9 +1,11 @@
-# Firestore project + credentials
-project_id: "YOUR_PROJECT_ID"
-creds_file: "/home/pi/keys/firebase-admin.json"
-user_uid: "YOUR_FIREBASE_UID"
+# Firestore project + Firebase Auth user
+project_id: "tilty-mctiltface"
+api_key: "AIzaSyDokp-NEs3IzLSdCV7h1Z3t7ZGoJokGSGw" # from Firebase console
+user_email: "tilt-pi@example.com"
+user_password: "super-secret-password"
+user_uid: "103258596443136961382"
 
 # Options
-allowed_colors: [] # leave empty [] for all
+allowed_colors: [] # leave [] for all
 post_min_interval_sec: 600
-debug: false
+debug: true

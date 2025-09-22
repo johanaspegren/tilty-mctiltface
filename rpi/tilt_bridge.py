@@ -1,4 +1,4 @@
-import requests
+import pathlib
 import asyncio, struct, socket, yaml, logging
 from datetime import datetime, timezone
 from uuid import UUID
@@ -33,7 +33,6 @@ TILT_UUID_TO_COLOR = {
 def f_to_c(temp_f: int) -> float:
     return round((temp_f - 32) * 5.0 / 9.0, 2)
 
-
 class TiltBridge:
     def __init__(self, cfg):
         self.writer = FirestoreWriter(
@@ -64,7 +63,6 @@ class TiltBridge:
         ):
             return False
         return True
-
 
     def detection_callback(self, device, adv):
         for cid, data in (adv.manufacturer_data or {}).items():
@@ -108,6 +106,7 @@ class TiltBridge:
                     "seen_iso": now.isoformat(),
                     "batch_id": batch_id,   # 👈 attach batch here
                 }
+                log.info(f"Posting {color} reading: {payload}")
 
                 self.writer.write_reading(color, payload)
                 self.last_post[color] = epoch
@@ -128,7 +127,8 @@ class TiltBridge:
 
 
 async def main():
-    with open("config.yaml") as f:
+    base_dir = pathlib.Path(__file__).parent
+    with open(base_dir / "config.yaml") as f:
         cfg = yaml.safe_load(f)
     bridge = TiltBridge(cfg)
     await bridge.run()
