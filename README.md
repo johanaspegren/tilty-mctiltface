@@ -78,7 +78,6 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install bleak python-dotenv pyyaml requests
 
-
 3. Bluetooth permissions
 Allow Python to access BLE without sudo:
 

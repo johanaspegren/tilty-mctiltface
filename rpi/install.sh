@@ -55,4 +55,9 @@ sudo systemctl daemon-reload
 sudo systemctl enable $SERVICE_NAME
 sudo systemctl restart $SERVICE_NAME
 
-echo "✅ Install complete! Logs available with: journalctl -u $SERVICE_NAME -f"
+echo "✅ Install complete!"
+echo "   The service should be running now. Check status with: sudo systemctl status $SERVICE_NAME"
+echo "   Logs can be viewed with: journalctl -u $SERVICE_NAME -f"
+echo "   or if you have a tilt clready running you can also see logs in:"
+echo "   tail -vf /home/pi/tiltbridge.log"
+
