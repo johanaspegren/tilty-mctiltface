@@ -66,45 +66,65 @@ Most RPIs should work, I wrote this for a RPI3 ona 8GB SD Card w Bookworm
 
 Note: You should have a fairly new python though for the libs sake
 
+### Quick Install
+
+Open the app https://tilty-live.web.app/tilts
+create an account with email/pw and log in on the app
+
+Enter email/pw in config.yaml (in this directory)
+
+Then run the installation script
+
+```bash
+cd ~/dev/tilt/rpi
+bash ./install.sh
+```
+
 ### 1. System packages
+
+Do not do this is you did the quick install :-)
 
 ```bash
 sudo apt update
 sudo apt install -y bluez
+```
 
-2. Project venv
+2. Project venv in the root dir, important or the calling command will fail
+
+```bash
+cd ..
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install bleak python-dotenv pyyaml requests
+cd rpi
+```
 
 3. Bluetooth permissions
-Allow Python to access BLE without sudo:
+   Allow Python to access BLE without sudo:
 
+```bash
 sudo setcap cap_net_raw,cap_net_admin+eip $(readlink -f $(which python3))
+```
 
 4. Firestore connection
-Open the app https://tilty-live.web.app/tilts
-create an account with email/pw and log in on the app
+   Open the app https://tilty-live.web.app/tilts
+   create an account with email/pw and log in on the app
 
+```bash
 Copy rpi/config.example.yaml to config.yaml and update the two fields with your email/pw:
 user_email: "tilt-pi@example.com"
 user_password: "super-secret-password"
 
 and also:
-allowed_colors: ["YELLOW", "RED"]   # optional, or leave [] for all
+allowed_colors: ["YELLOW", "RED"]   # optionally add your tilts, or leave [] for all
 post_min_interval_sec: 600          # only push updates every 10min per Tilt
 debug: false
-
-
-🚀 Running
-Manually:
-
-source ./.venv/bin/activate
-python ./rpi/tilt_bridge.py
+```
 
 ⚙️ Systemd Setup
 
+```bash
 Create service file tiltbridge.service:
 
 [Unit]
@@ -122,22 +142,28 @@ Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target
-
+```
 
 Install + start:
 
+```bash
 sudo cp tiltbridge.service /etc/systemd/system/tiltbridge.service
 sudo systemctl daemon-reload
 sudo systemctl enable tiltbridge.service
 sudo systemctl start tiltbridge.service
+```
 
 📝 Logs
+
+```bash
 tail -f /home/pi/tiltbridge.log
 sudo systemctl status tiltbridge.service
 journalctl -u tiltbridge.service -f
-
+```
 
 Restart
+
+```bash
 # reload systemd configs (if you changed tiltbridge.service itself)
 sudo systemctl daemon-reload
 
@@ -150,6 +176,14 @@ sudo systemctl status tiltbridge.service
 # follow logs live
 journalctl -u tiltbridge.service -f
 
+```
+
+🚀 Running
+Manually:
+
+```bash
+source ./.venv/bin/activate
+python ./rpi/tilt_bridge.py
 ```
 
 🧹 Cleanup
