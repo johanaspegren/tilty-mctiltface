@@ -49,27 +49,75 @@
   gap: 8px;
 }
 
+.form-toggle {
+  margin-bottom: 12px;
+}
+
+.form-toggle .btn {
+  background: #743e01; /* amber-600 */
+  border-color: #f59e0b; /* amber-500 */
+  color: #fff;
+  font-weight: 500;
+}
+
+.form-toggle .btn:hover {
+  border-color: #f59e0b; /* amber-500 */
+  background: #111827;
+}
+
 .batch-list {
   display: grid;
   gap: 16px;
 }
-
 .batch-card {
-  background: #111;
+  background: #0f0f14; /* match the app background */
   border: 1px solid #27272a;
   border-radius: 12px;
   padding: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.batch-card:hover {
+  border-color: #3b82f6; /* soft blue highlight */
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
 }
 
 .batch-card h4 {
   margin-top: 0;
-  color: #93c5fd;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.batch-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #d4d4d8;
+}
+
+.batch-card b {
+  color: #a1a1aa; /* muted label tone */
 }
 
 .batch-actions {
   display: flex;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  background: #1f2937;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  border-radius: 20px; /* pill style */
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+  background: #111827;
+  border-color: #3b82f6;
 }
 
 .btn.danger {
@@ -79,4 +127,5 @@
 
 .btn.danger:hover {
   background: #450a0a;
+  border-color: #dc2626;
 }
