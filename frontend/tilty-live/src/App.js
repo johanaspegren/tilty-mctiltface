@@ -9,7 +9,7 @@ import "./App.css";
 
 import { setLogLevel } from "firebase/firestore";
 
-setLogLevel("debug");
+//setLogLevel("debug");
 
 function App() {
   const [user, setUser] = useState(null);
