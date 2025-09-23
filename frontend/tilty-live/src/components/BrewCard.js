@@ -47,17 +47,21 @@ export default function BrewCard({
       })
     : "Unknown";
 
+    function addDays(date, _days) {
+        const days = Number(_days || 0);
+        const newDate = new Date(date);
+        newDate.setDate(date.getDate() + days);
+        return newDate;
+   }
+
     function getDryHopReminder(batch) {
       if (!batch?.dryhop_after_days || !batch?.start) return null;
 
       const startDate = new Date(batch.start);
-      const dryhopDate = new Date(startDate);
-      dryhopDate.setDate(startDate.getDate() + batch.dryhop_after_days);
-      console.log("Dry hop batch.dryhop_after_days:", batch.dryhop_after_days);
-      console.log("Dry hop date:", dryhopDate);
+      let hopDate = addDays(startDate, batch.dryhop_after_days);
       
       const now = new Date();
-      const diffDays = Math.ceil((dryhopDate - now) / (1000 * 60 * 60 * 24));
+      const diffDays = Math.ceil((hopDate - now) / (1000 * 60 * 60 * 24));
 
       if (diffDays < -1) return null; // already passed
       if (diffDays <= 0) return "⚠️ Dry hop today!";
