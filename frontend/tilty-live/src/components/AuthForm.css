@@ -1,17 +1,93 @@
 .auth-card {
-  background:#0b0b0f; border:1px solid #27272a; border-radius:16px;
-  padding:16px; color:#e5e7eb; max-width:520px;
+  background: #0b0b0f;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 20px;
+  color: #e5e7eb;
+  max-width: 420px;
 }
-.auth-row { display:flex; align-items:center; gap:12px; margin:8px 0; justify-content:space-between; }
-.lbl { width:120px; color:#a1a1aa; font-size:14px; }
+
+.auth-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #d87504; /* amber highlight for brand */
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+  justify-content: space-between;
+}
+
+.auth-row.between {
+  justify-content: space-between;
+}
+
+.lbl {
+  width: 120px;
+  color: #a1a1aa;
+  font-size: 14px;
+}
+
 .inp {
-  flex:1; background:#0f0f14; color:#e5e7eb; border:1px solid #3f3f46;
-  border-radius:12px; padding:8px 12px; font-size:14px;
+  flex: 1;
+  background: #0f0f14;
+  color: #e5e7eb;
+  border: 1px solid #3f3f46;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 14px;
 }
+
+.inp:focus {
+  outline: none;
+  border-color: #facc15;
+  box-shadow: 0 0 0 1px #facc15;
+}
+
 .btn {
-  background:#1f2937; color:#fff; border:1px solid #374151;
-  border-radius:10px; padding:8px 12px; cursor:pointer;
+  background: #1f2937;
+  color: #fff;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s, border-color 0.2s;
 }
-.btn:hover { background:#111827; }
-.link { background:none; border:none; color:#93c5fd; cursor:pointer; }
-.err { color:#fca5a5; font-size:13px; }
+
+.btn:hover {
+  background: #2563eb;
+  border-color: #3b82f6;
+}
+
+.auth-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.link {
+  background: none;
+  border: none;
+  color: #93c5fd;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #bfdbfe;
+  text-decoration: underline;
+}
+
+.err {
+  color: #fca5a5;
+  font-size: 13px;
+  margin-top: 4px;
+}

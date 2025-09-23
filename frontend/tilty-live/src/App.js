@@ -18,7 +18,7 @@ function App() {
   if (!user) {
     return (
       <div style={{ padding: "2rem" }}>
-        <h2>Tilty McTiltface Dashboard</h2>
+        <h2>Tilty McTiltface 🍺</h2>
         <AuthForm user={null} onAuthed={setUser} />
       </div>
     );
@@ -27,10 +27,12 @@ function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h2>Welcome, {user.email}</h2>
-        <AuthForm user={user} />
+        <h2>Tilty McTiltface 🍺</h2>
+        <div className="user-box">
+          <AuthForm user={user} />
+        </div>
       </header>
-
+      <br></br>
       <nav className="app-tabs">
         <NavLink to="/" end className={({ isActive }) => `tab ${isActive ? "active" : ""}`}>
           Home

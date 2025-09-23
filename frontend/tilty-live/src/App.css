@@ -18,25 +18,7 @@
   margin-bottom: 1rem;
 }
 
-.tab {
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 8px;
-  padding: 8px 16px;
-  color: #e5e7eb;
-  cursor: pointer;
-  font-size: 14px;
-}
 
-.tab:hover {
-  background: #111827;
-}
-
-.tab.active {
-  background: #2563eb;
-  border-color: #3b82f6;
-  color: #fff;
-}
 
 .app-main {
   background: #0f0f14;
@@ -49,4 +31,149 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+/* Buttons */
+/* General buttons */
+button {
+  background-color: #3b82f6; /* softer blue by default */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  text-decoration: none; /* 🔑 stop underlining */
+}
+
+button:hover {
+  background-color: #2563eb; /* darker blue */
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  background-color: #374151;
+  cursor: not-allowed;
+}
+
+/* NavLink / anchor tabs */
+.tab {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none; /* 🔑 prevent underline */
+}
+
+.tab:hover {
+  background: #111827;
+}
+
+.tab.active {
+  background: #743e01; /* amber-600 */
+  border-color: #f59e0b; /* amber-500 */
+  color: #fff;
+}
+
+/* Inputs, Textareas, Selects */
+input.inp,
+textarea.inp,
+select.inp {
+  width: 100%;
+  padding: 8px;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #e5e7eb;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input.inp:focus,
+textarea.inp:focus,
+select.inp:focus {
+  border-color: #3b82f6;
+  outline: none;
+  background-color: #111827;
+}
+
+/* Cards */
+.card,
+.batch-card,
+.create-card {
+  background-color: #111827;
+  border: 1px solid #1e293b;
+  padding: 1rem;
+  border-radius: 10px;
+  color: #e5e7eb;
+}
+
+.batch-card:hover {
+  border-color: #3b82f6;
+}
+
+/* Labels & section titles */
+.lbl {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+  color: #9ca3af;
+}
+
+.section-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 0.75rem;
+  color: #f3f4f6;
+}
+
+/* Pills */
+.pill {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #d1d5db;
+  margin-left: 6px;
+}
+
+/* Readings */
+.readings {
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #1e293b;
+}
+
+.reading-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #d1d5db;
+}
+
+/* Misc */
+.chev {
+  font-size: 18px;
+  margin-left: 8px;
+  color: #6b7280;
+}
+
+.error {
+  color: #f87171;
+}
+
+.muted {
+  color: #6b7280;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280;
 }
