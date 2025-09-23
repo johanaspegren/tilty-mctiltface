@@ -5,7 +5,7 @@ export default function TempGauge({ value = 20, min = 0, max = 40, label = "°C"
   const angle = Math.PI * (1 - pct); // 180..0
   const r = 50, cx = 60, cy = 60;
   const x = cx + r * Math.cos(angle);
-  const y = cy + r * Math.sin(angle);
+  const y = cy - r * Math.sin(angle);
 
   return (
     <svg width="140" height="80" viewBox="0 0 140 80">
