@@ -82,14 +82,23 @@ export async function listMeasurements(color) {
 }
 
 export function subscribeMeasurements(color, callback) {
-  return onSnapshot(
+  console.log(`[Firestore] Subscribing to measurements for ${color}`);
+
+  const unsubscribe = onSnapshot(
     query(tiltsCol(color), orderBy("seen_at", "desc")),
     (snap) => {
       const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       callback(data);
     }
   );
+
+  return () => {
+    console.log(`[Firestore] Unsubscribing from ${color}`);
+    unsubscribe();
+  };
 }
+
+
 
 // --- Link measurement to batch ---
 export async function assignMeasurement(color, measurementId, batchId) {

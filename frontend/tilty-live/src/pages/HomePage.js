@@ -2,14 +2,15 @@
 import { useEffect, useState } from "react";
 import BrewCard from "../components/BrewCard";
 import { subscribeMeasurements, getBatchForTilt } from "../lib/firestore";
+import { useMemo } from "react";
 import "./HomePage.css";
 
 export default function HomePage() {
   const [tilts, setTilts] = useState({});
   const [batchByColor, setBatchByColor] = useState({});
-  const colors = ["RED", "YELLOW"];
-
-  // Load batch metadata for each Tilt
+  const colors = useMemo(() => ["RED", "YELLOW"], []);
+  
+// Load batch metadata once per color
   useEffect(() => {
     async function loadBatches() {
       const map = {};
@@ -20,7 +21,7 @@ export default function HomePage() {
     }
     loadBatches();
   }, [colors]);
-
+  
   // Subscribe to Tilt readings
   useEffect(() => {
     const unsubscribers = colors.map((color) =>
@@ -31,6 +32,7 @@ export default function HomePage() {
     return () => unsubscribers.forEach((u) => u && u());
   }, [colors]);
 
+  
   return (
     <div className="page">
       <h3>Active Brews</h3>
