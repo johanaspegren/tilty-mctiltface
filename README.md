@@ -66,6 +66,12 @@ Most RPIs should work, I wrote this for a RPI3 ona 8GB SD Card w Bookworm
 
 Note: You should have a fairly new python though for the libs sake
 
+Fetch the code
+```bash
+git clone https://github.com/johanaspegren/tilty-mctiltface
+cd tilty-mctiltface
+```
+
 ### Quick Install
 
 Open the app https://tilty-live.web.app/tilts
