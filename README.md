@@ -66,8 +66,10 @@ Most RPIs should work, I wrote this for a RPI3 ona 8GB SD Card w Bookworm
 
 Note: You should have a fairly new python though for the libs sake
 
-Fetch the code
+Fetch the code into a 'dev' directory, create if needed
+
 ```bash
+mkdir dev
 git clone https://github.com/johanaspegren/tilty-mctiltface
 cd tilty-mctiltface
 ```
@@ -82,7 +84,7 @@ Enter email/pw in config.yaml (in this directory)
 Then run the installation script
 
 ```bash
-cd ~/dev/tilt/rpi
+cd ~/dev/tilty-mctiltface/rpi
 bash ./install.sh
 ```
 
@@ -138,8 +140,8 @@ Description=Tilty McTiltface BLE→Firestore
 After=network.target bluetooth.target
 
 [Service]
-ExecStart=/home/pi/dev/tilt/.venv/bin/python /home/pi/dev/tilt/rpi/tilt_bridge.py
-WorkingDirectory=/home/pi/dev/tilt/rpi
+ExecStart=/home/pi/dev/tilty-mctiltface/.venv/bin/python /home/pi/dev/tilty-mctiltface/rpi/tilt_bridge.py
+WorkingDirectory=/home/pi/dev/tilty-mctiltface/rpi
 StandardOutput=append:/home/pi/tiltbridge.log
 StandardError=append:/home/pi/tiltbridge.log
 Restart=always
