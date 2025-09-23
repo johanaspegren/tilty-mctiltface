@@ -1,28 +1,35 @@
 // src/pages/HomePage.js
 import { useEffect, useState } from "react";
 import BrewCard from "../components/BrewCard";
-import { subscribeMeasurements } from "../lib/firestore";
+import { subscribeMeasurements, getBatchForTilt } from "../lib/firestore";
 import "./HomePage.css";
 
 export default function HomePage() {
-  const [tilts, setTilts] = useState({}); // store readings per color
+  const [tilts, setTilts] = useState({});
+  const [batchByColor, setBatchByColor] = useState({});
+  const colors = ["RED", "YELLOW"];
 
-  // Define which tilt colors you want to track
-  const colors = ["RED", "YELLOW", "GREEN", "BLUE"];
-
+  // Load batch metadata for each Tilt
   useEffect(() => {
-    // Subscribe to all tilt colors
+    async function loadBatches() {
+      const map = {};
+      for (const c of colors) {
+        map[c] = await getBatchForTilt(c);
+      }
+      setBatchByColor(map);
+    }
+    loadBatches();
+  }, [colors]);
+
+  // Subscribe to Tilt readings
+  useEffect(() => {
     const unsubscribers = colors.map((color) =>
       subscribeMeasurements(color, (data) => {
-        setTilts((prev) => ({
-          ...prev,
-          [color]: data, // full history for this tilt
-        }));
+        setTilts((prev) => ({ ...prev, [color]: data }));
       })
     );
-
     return () => unsubscribers.forEach((u) => u && u());
-  }, []);
+  }, [colors]);
 
   return (
     <div className="page">
@@ -30,13 +37,16 @@ export default function HomePage() {
       <div className="tilt-grid">
         {Object.entries(tilts).map(([color, readings]) => {
           if (!readings || readings.length === 0) return null;
-          const latest = readings[0]; // newest first
+          const latest = readings[0];
+          const batch = batchByColor[color] || null;
+
           return (
             <BrewCard
               key={color}
               latest={latest}
-              history={readings.slice(0, 50)} // show up to 50 readings for sparkline
-              batchName={latest.batch_id ? `Batch ${latest.batch_id}` : null}
+              history={readings.slice(0, 50)}
+              units={{ gravity: "sg", temp: "c" }} // optional: hook in user prefs
+              batch={batch}                        // 🔥 full batch object
               onClick={() => console.log("Clicked tilt:", color)}
             />
           );
