@@ -7,7 +7,7 @@ export default function BrewCard({
   latest,
   history = [],
   units = { gravity: "sg", temp: "c" },
-  batchName,
+  batch,          // 🔥 new: full batch object
   onClick,
 }) {
   if (!latest) return null;
@@ -36,7 +36,6 @@ export default function BrewCard({
   const trendIcon = trend > 0 ? "↗" : trend < 0 ? "↘" : "→";
   const bars = rssiBars(rssi);
 
-  // format both relative and absolute timestamp
   const tsString = ts
     ? ts.toLocaleString([], {
         year: "numeric",
@@ -61,9 +60,20 @@ export default function BrewCard({
           {color}
         </span>
         <div className="muted">
-          {batchName || "Active batch"} • {ts ? timeAgo(ts) : "—"}
+          {batch ? batch.name : "Unlinked batch"} • {ts ? timeAgo(ts) : "—"}
         </div>
       </div>
+
+      {batch && (
+        <div className="batch-info">
+          <div className="batch-line">
+            <b>{batch.style || "—"}</b>
+            {batch.start && <span> • Started {batch.start}</span>}
+            {batch.end && <span> • Ends {batch.end}</span>}
+          </div>
+          {batch.hops && <div className="muted">Hops: {batch.hops}</div>}
+        </div>
+      )}
 
       <div className="grid">
         <div className="main">
