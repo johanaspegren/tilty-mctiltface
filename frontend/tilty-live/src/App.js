@@ -7,6 +7,10 @@ import TiltsPage from "./pages/TiltsPage";
 import BatchesPage from "./pages/BatchesPage";
 import "./App.css";
 
+import { setLogLevel } from "firebase/firestore";
+
+setLogLevel("debug");
+
 function App() {
   const [user, setUser] = useState(null);
 

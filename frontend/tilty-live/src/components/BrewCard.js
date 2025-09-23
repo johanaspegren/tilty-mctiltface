@@ -3,6 +3,7 @@ import TempGauge from "./TempGauge";
 import { colourHex, sgToPlato, timeAgo, rssiBars, trendOf } from "../utils/format";
 import "./BrewCard.css";
 
+
 export default function BrewCard({
   latest,
   history = [],
@@ -46,7 +47,25 @@ export default function BrewCard({
       })
     : "Unknown";
 
-  return (
+    function getDryHopReminder(batch) {
+      if (!batch?.dryhop_after_days || !batch?.start) return null;
+
+      const startDate = new Date(batch.start);
+      const dryhopDate = new Date(startDate);
+      dryhopDate.setDate(startDate.getDate() + batch.dryhop_after_days);
+      console.log("Dry hop batch.dryhop_after_days:", batch.dryhop_after_days);
+      console.log("Dry hop date:", dryhopDate);
+      
+      const now = new Date();
+      const diffDays = Math.ceil((dryhopDate - now) / (1000 * 60 * 60 * 24));
+
+      if (diffDays < -1) return null; // already passed
+      if (diffDays <= 0) return "⚠️ Dry hop today!";
+      if (diffDays === 1) return "🌿 Dry hop tomorrow!";
+      return `🌿 Dry hop in ${diffDays} days`;
+    }
+
+    return (
     <div
       className="brew-card"
       style={{ borderColor: colourHex[color], cursor: "pointer" }}
@@ -72,6 +91,9 @@ export default function BrewCard({
             {batch.end && <span> • Ends {batch.end}</span>}
           </div>
           {batch.hops && <div className="muted">Hops: {batch.hops}</div>}
+          {getDryHopReminder(batch) && (
+            <div className="reminder">{getDryHopReminder(batch)}</div>
+          )}
         </div>
       )}
 

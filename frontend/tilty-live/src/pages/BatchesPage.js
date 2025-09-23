@@ -13,6 +13,7 @@ export default function BatchesPage() {
     notes: "",
     start: "",
     end: "",
+    dryhop_after_days: "", // 👈 new field
   });
 
 
@@ -35,7 +36,8 @@ useEffect(() => { refresh(); }, []);
     e.preventDefault();
     const id = await saveBatch({ ...form });
     console.log("Saved batch", id);
-    setForm({ name: "", style: "", hops: "", notes: "", start: "", end: "" });
+    setForm({ name: "", style: "", hops: "", notes: "", start: "", end: "", dryhop_after_days: "",
+    });
     setEditing(null);
     setShowForm(false); // 👈 collapse form after submit
     refresh();
@@ -80,6 +82,17 @@ useEffect(() => { refresh(); }, []);
             <input name="hops" value={form.hops} onChange={handleChange} />
           </div>
           <div className="form-row">
+            <label>Dry Hop After (days)</label>
+            <input
+              type="number"
+              min="0"
+              name="dryhop_after_days"
+              value={form.dryhop_after_days}
+              onChange={handleChange}
+              placeholder="e.g. 10"
+            />
+          </div>
+          <div className="form-row">
             <label>Notes</label>
             <textarea name="notes" value={form.notes} onChange={handleChange} />
           </div>
@@ -116,7 +129,15 @@ useEffect(() => { refresh(); }, []);
             <p><b>Style:</b> {b.style || "—"}</p>
             <p><b>Hops:</b> {b.hops || "—"}</p>
             <p><b>Notes:</b> {b.notes || "—"}</p>
-            <p><b>Start:</b> {b.start || "—"} <b>End:</b> {b.end || "—"}</p>
+            <p>
+              <b>Start:</b> {b.start || "—"} <b>End:</b> {b.end || "—"}
+            </p>
+            <p>
+              <b>Dry Hop:</b>{" "}
+              {b.dryhop_after_days
+                ? `${b.dryhop_after_days} days after start`
+                : "—"}
+            </p>
             <div className="batch-actions">
               <button className="btn" onClick={() => editBatch(b)}>Edit</button>
               <button className="btn danger" onClick={() => handleDelete(b.id)}>Delete</button>
@@ -124,6 +145,7 @@ useEffect(() => { refresh(); }, []);
           </div>
         ))}
       </div>
+
     </div>
   );
 } 

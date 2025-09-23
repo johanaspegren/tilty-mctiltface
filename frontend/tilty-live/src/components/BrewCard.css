@@ -14,6 +14,16 @@
   gap:12px; 
   align-items:center; 
   margin-top:12px;}
+.brew-card .reminder {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #14532d; /* dark green */
+  color: #bbf7d0;       /* soft mint text */
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .main { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
 .metric .label { color:#a1a1aa; font-size:12px; }
 .metric .value { font-size:28px; font-weight:800; }
