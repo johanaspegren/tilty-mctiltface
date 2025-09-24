@@ -5,7 +5,7 @@ import logging
 log = logging.getLogger("tiltbridge")
 
 class FirestoreWriter:
-    def __init__(self, project_id: str, api_key: str, email: str, password: str, user_uid: str):
+    def __init__(self, project_id: str, api_key: str, email: str, password: str):
         self.project_id = project_id
         self.api_key = api_key
         self.email = email

@@ -40,7 +40,6 @@ class TiltBridge:
             cfg["api_key"],
             cfg["user_email"],
             cfg["user_password"],
-            cfg["user_uid"],
         )
         self.allowed_colors = set(c.upper() for c in cfg.get("allowed_colors", [])) or None
         self.min_interval = cfg.get("post_min_interval_sec", 15)
