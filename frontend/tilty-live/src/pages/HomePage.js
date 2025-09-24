@@ -8,7 +8,7 @@ import "./HomePage.css";
 export default function HomePage() {
   const [tilts, setTilts] = useState({});
   const [batchByColor, setBatchByColor] = useState({});
-  const colors = useMemo(() => ["RED", "YELLOW"], []);
+  const colors = useMemo(() => ["RED", "GREEN", "BLACK", "PURPLE","ORANGE", "BLUE", "YELLOW", "PINK"], []);
   
 // Load batch metadata once per color
   useEffect(() => {
