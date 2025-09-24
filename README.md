@@ -70,8 +70,9 @@ Fetch the code into a 'dev' directory, create if needed
 
 ```bash
 mkdir dev
+cd dev
 git clone https://github.com/johanaspegren/tilty-mctiltface
-cd tilty-mctiltface
+cd tilty-mctiltface/rpi
 ```
 
 ### Quick Install
